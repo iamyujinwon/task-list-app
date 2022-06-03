@@ -3,12 +3,7 @@ const taskList = document.querySelector('.task-list');
 const noTask = document.querySelector('.no-tasks');
 let counter = 0;
 
-// const LIST_LS = "tasks";
-// let tasks = [];
-// localStorage.setItem("task_list", JSON.stringify(tasks));
-// let localStorageTasks = JSON.parse(localStorage.getItem("task_list"));
-
-// loadStorage();
+let tasks = [];
 
 input.addEventListener('keypress', e => {
   if (e.key === 'Enter') {
@@ -16,37 +11,26 @@ input.addEventListener('keypress', e => {
   }
 })
 
-// function loadStorage() {
+loadStorage();
 
-//   const loadStorage = localStorage.getItem(LIST_LS);
+function loadStorage() {
+  const localStorageTasks = JSON.parse(localStorage.getItem("task_list"));
 
-//   if (!loadStorage) {
-//     return;
-//   }
-
-//   const parseList = JSON.parse(loadStorage);
-//   // parseList.forEach(task => createItem(task));
-
-
-//   for (let i = 0; i < parseList.length; i++) {
-//     createItem(parseList[i]);
-//   }
-
-// }
-
-// function saveStorage() {
-//   localStorage.setItem(LIST_LS, JSON.stringify(tasks));
-// }
-
+  localStorageTasks.forEach(task => tasks.push(task));
+  localStorageTasks.forEach(task => createItem(task));
+}
 
 function onAdd() {
   const text = input.value;
 
-  const task = createItem(text);
-  taskList.appendChild(task);
+  if (text === '') {
+    return;
+  }
 
-  // tasks.push(text);
-  // saveStorage();
+  createItem(text);
+  
+  tasks.push();
+  localStorage.setItem("task_list", JSON.stringify(tasks));
 
   input.value = '';
   input.focus();
@@ -58,7 +42,6 @@ function createItem(name) {
   taskRow.setAttribute('class', 'task-row');
 
   taskList.appendChild(taskRow);
-  // tasks.push(name);
   counter++;
 
   const task = document.createElement('div');
@@ -87,7 +70,8 @@ function createItem(name) {
 
   deleteBtn.addEventListener('click', () => {
     taskList.removeChild(taskRow);
-    // tasks.pop(taskName);
+    tasks = tasks.filter((e) => e !== name);
+    localStorage.setItem("task_list", JSON.stringify(tasks));
     counter--;
     setCount();
   })
@@ -104,8 +88,6 @@ function createItem(name) {
       taskRow.style.backgroundColor = "#FFFFFF";
     }
   })
-
-  return taskRow;
 }
 
 function setCount() {
