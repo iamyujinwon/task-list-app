@@ -1,6 +1,8 @@
 let input = document.querySelector('input');
 let task;
 const taskList = document.querySelector("#task-list");
+let counter = 0;
+const noTask = document.querySelector("#no-tasks");
 
 input.addEventListener('keypress', e => {
   if (e.key === 'Enter') {
@@ -9,6 +11,10 @@ input.addEventListener('keypress', e => {
     if (task != "") {
       clearInput();
       addTask();
+
+      if (counter > 0) {
+        noTask.style.display = "none";
+      }
     }
   }
 });
@@ -30,11 +36,17 @@ function addTask() {
   `;
 
   taskList.appendChild(div);
+  counter++;
 
   const remover = div.querySelector(".fa-circle-minus");
   remover.addEventListener("click", e => {
     const minusButton = e.target;
     const toDo = minusButton.parentNode;
     taskList.removeChild(toDo);
+    counter--;
+
+    if (counter == 0) {
+      noTask.style.display = "block";
+    }
   });
 }
