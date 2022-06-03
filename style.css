@@ -1,46 +1,52 @@
 * {
   font-family: Roboto;
+  box-sizing: border-box;
 }
 
 body{
- padding: 20px 15px;
+ padding: 10px 15px;
+ background-color: #F2F1F6;
 }
 
-#title {
-  font-size: 40px;
-  font-weight: 800;
-  margin: 15px 0px;
+.header {
+  padding-bottom: 15px;
+  font-size: 35px;
+  font-weight: 900;
 }
 
-#add {
+.input {
+  margin-bottom: 25px;
   width: 100%;
-  box-sizing: border-box;
   padding: 20px;
   font-size: 18px;
-  background-color: #F2F2F2;
+  background-color: #E4E3E9;
+  border:#E4E3E9;
   border-radius: 10px;
-  margin-bottom: 25px;
-  border:#F2F2F2;
   height: 35px;
+  outline: none;
 }
 
-.to-do{
-  font-size: 15px;
-  padding: 20px;
+.task-list {
+  margin: 0;
+  padding: 0;
+  background-color: white;
   border-radius: 10px;
-  margin-bottom: 15px;
-  border: 2px solid #F2F2F2;
+}
+
+.task-row {
+  list-style-type: none;
+}
+
+.task{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 15px;
+  padding: 20px;
+  border-bottom: 0.5px solid #E4E3E9;
 }
 
-.content {
-  display: flex;
-  align-items: center;
-}
-
-.task-title {
+.task-name {
   margin-left: 10px;
 }
 
@@ -48,8 +54,12 @@ body{
   cursor: pointer;
 }
 
-#no-tasks {
+.no-tasks {
   text-align: center;
   font-size: 15px;
-  color: #b9b9b9;
+  color: #919191;
+}
+
+.fa-circle-minus {
+  color: #2f2f2f;
 }
