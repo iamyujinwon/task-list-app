@@ -28,8 +28,8 @@ function onAdd() {
   }
 
   createItem(text);
-  
-  tasks.push();
+
+  tasks.push(text);
   localStorage.setItem("task_list", JSON.stringify(tasks));
 
   input.value = '';
