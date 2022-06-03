@@ -4,8 +4,12 @@
 }
 
 body{
- padding: 10px 15px;
  background-color: #F2F1F6;
+}
+
+.list {
+  padding: 10px 15px;
+  margin-bottom: 40px;
 }
 
 .header {
@@ -31,10 +35,16 @@ body{
   padding: 0;
   background-color: white;
   border-radius: 10px;
+  overflow: hidden;
+}
+
+li:last-child {
+  border-bottom: none;
 }
 
 .task-row {
   list-style-type: none;
+  border-bottom: 0.5px solid #E4E3E9;
 }
 
 .task{
@@ -43,7 +53,6 @@ body{
   align-items: center;
   font-size: 15px;
   padding: 20px;
-  border-bottom: 0.5px solid #E4E3E9;
 }
 
 .task-name {
@@ -55,9 +64,16 @@ body{
 }
 
 .no-tasks {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: #e9e8ec;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
   text-align: center;
-  font-size: 15px;
-  color: #919191;
+  font-size: 12px;
 }
 
 .fa-circle-minus {

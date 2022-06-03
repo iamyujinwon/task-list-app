@@ -16,140 +16,56 @@ function onAdd() {
     return;
   } 
 
-  const task = createItem(taskName);
-  taskList.appendChild(task);
-  counter++;
-
-  input.value = '';
-  input.focus();
-  isEmpty();
-}
-
-function isEmpty() {
-  if (counter > 0) {
-    noTask.style.display = "none";
-  } else {
-    noTask.style.display = "block";
-  }
-}
-
-function createItem(name) {
-
   const taskRow  = document.createElement('li');
   taskRow.setAttribute('class', 'task-row');
 
-  // taskRow.innerHTML = `
-  //   <div class="task">
-  //     <div>
-  //       <input type="checkbox" class="checkbox"/>
-  //       <span class="task-name">${name}</span>
-  //     </div>
-  //     <div class="deleteBtn">
-  //       <i class="fa-solid fa-circle-minus fa-lg"></i>
-  //     </div>
-  //   </div>
-  // `
+  taskRow.innerHTML = `
+    <div class="task">
+      <div>
+        <input type="checkbox" class="checkbox"/>
+        <span class="checkmark"></span>
+        <span class="task-name">${taskName}</span>
+      </div>
+      <div class="deleteBtn">
+        <i class="fa-solid fa-circle-minus fa-lg"></i>
+      </div>
+    </div>
+  `
   taskList.appendChild(taskRow);
+  counter++;
 
-  const task = document.createElement('div');
-  task.setAttribute('class', 'task');
-
-  taskRow.appendChild(task);
-
-  const div = document.createElement('div');
-
-  task.appendChild(div);
-
-  const checkbox = document.createElement('input');
-  checkbox.setAttribute('class', 'checkbox');
-  checkbox.setAttribute('type', 'checkbox');
-
-  const taskName = document.createElement('span');
-  taskName.setAttribute('class', 'task-name');
-  taskName.innerText = name;
-  
-  div.appendChild(checkbox);
-  div.appendChild(taskName);
-
-  const deleteBtn = document.createElement('div');
-  deleteBtn.setAttribute('class', 'deleteBtn');
-  deleteBtn.innerHTML = `<i class="fa-solid fa-circle-minus fa-lg"></i>`;
-
+  const deleteBtn = taskRow.querySelector('.deleteBtn');
   deleteBtn.addEventListener('click', () => {
     taskList.removeChild(taskRow);
     counter--;
-    isEmpty();
+    setCount();
   })
 
-  task.appendChild(deleteBtn);
+  const name = taskRow.querySelector('.task-name');
+  const checkbox = taskRow.querySelector('.checkbox');
+  checkbox.addEventListener('click', () => {
+    if (checkbox.checked == true) {
+      name.style.color = "#b9b9b9";
+      taskRow.style.backgroundColor = "#F9F9F9";
+    } else {
+      name.style.color = "black";
+      taskRow.style.backgroundColor = "#FFFFFF";
+    }
+  })
 
-  return taskRow;
+  input.value = '';
+  input.focus();
+  setCount();
 }
 
-
-
-// let input = document.querySelector('input');
-// let task;
-// const taskList = document.querySelector("#task-list");
-// let counter = 0;
-// const noTask = document.querySelector("#no-tasks");
-
-// input.addEventListener('keypress', e => {
-//   if (e.key === 'Enter') {
-//     task = input.value;
-
-//     if (task != "") {
-//       clearInput();
-//       addTask();
-//       isEmpty();
-//     }
-//   }
-// });
-
-// function addTask() {
-//   const div = document.createElement('div');
-//   div.setAttribute("class", "task");
-
-//   div.innerHTML = `
-//     <div class="content">
-//       <input class="checkbox" type="checkbox">
-//       <div class="task-title">${task}</div>
-//     </div>
-//     <i class="fa-solid fa-circle-minus fa-lg"></i>
-//   `;
-
-//   taskList.appendChild(div);
-//   counter++;
-
-//   const remover = div.querySelector(".fa-circle-minus");
-//   remover.addEventListener("click", e => {
-//     const minusButton = e.target;
-//     const toDo = minusButton.parentNode;
-//     taskList.removeChild(toDo);
-//     counter--;
-
-//     isEmpty();
-//   });
-
-//   const checkbox = div.querySelector(".checkbox");
-//   const taskTitle = div.querySelector(".task-title");
-//   checkbox.addEventListener("click", e => {
-//     if (checkbox.checked == true) {
-//       taskTitle.style.color = "#b9b9b9";
-//     } else {
-//       taskTitle.style.color = "black";
-//     }
-//   });
-// }
-
-// function clearInput() {
-//   input.value= "";
-// }
-
-// function isEmpty() {
-//   if (counter > 0) {
-//     noTask.style.display = "none";
-//   } else {
-//     noTask.style.display = "block";
-//   }
-// }
+function setCount() {
+  if (counter === 0) {
+    noTask.innerText = `No tasks`;
+  } else {
+    if (counter === 1) {
+      noTask.innerText = `${counter} task`;
+    } else {
+      noTask.innerText = `${counter} tasks`;
+    }
+  }
+}
