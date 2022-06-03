@@ -3,59 +3,109 @@ const taskList = document.querySelector('.task-list');
 const noTask = document.querySelector('.no-tasks');
 let counter = 0;
 
+// const LIST_LS = "tasks";
+// let tasks = [];
+// localStorage.setItem("task_list", JSON.stringify(tasks));
+// let localStorageTasks = JSON.parse(localStorage.getItem("task_list"));
+
+// loadStorage();
+
 input.addEventListener('keypress', e => {
   if (e.key === 'Enter') {
     onAdd();
   }
 })
 
+// function loadStorage() {
+
+//   const loadStorage = localStorage.getItem(LIST_LS);
+
+//   if (!loadStorage) {
+//     return;
+//   }
+
+//   const parseList = JSON.parse(loadStorage);
+//   // parseList.forEach(task => createItem(task));
+
+
+//   for (let i = 0; i < parseList.length; i++) {
+//     createItem(parseList[i]);
+//   }
+
+// }
+
+// function saveStorage() {
+//   localStorage.setItem(LIST_LS, JSON.stringify(tasks));
+// }
+
+
 function onAdd() {
-  const taskName = input.value;
+  const text = input.value;
 
-  if (taskName === '') {
-    return;
-  } 
+  const task = createItem(text);
+  taskList.appendChild(task);
 
-  const taskRow  = document.createElement('li');
-  taskRow.setAttribute('class', 'task-row');
-
-  taskRow.innerHTML = `
-    <div class="task">
-      <div>
-        <input type="checkbox" class="checkbox"/>
-        <span class="checkmark"></span>
-        <span class="task-name">${taskName}</span>
-      </div>
-      <div class="deleteBtn">
-        <i class="fa-solid fa-circle-minus fa-lg"></i>
-      </div>
-    </div>
-  `
-  taskList.appendChild(taskRow);
-  counter++;
-
-  const deleteBtn = taskRow.querySelector('.deleteBtn');
-  deleteBtn.addEventListener('click', () => {
-    taskList.removeChild(taskRow);
-    counter--;
-    setCount();
-  })
-
-  const name = taskRow.querySelector('.task-name');
-  const checkbox = taskRow.querySelector('.checkbox');
-  checkbox.addEventListener('click', () => {
-    if (checkbox.checked == true) {
-      name.style.color = "#b9b9b9";
-      taskRow.style.backgroundColor = "#F9F9F9";
-    } else {
-      name.style.color = "black";
-      taskRow.style.backgroundColor = "#FFFFFF";
-    }
-  })
+  // tasks.push(text);
+  // saveStorage();
 
   input.value = '';
   input.focus();
   setCount();
+}
+
+function createItem(name) {
+  const taskRow  = document.createElement('li');
+  taskRow.setAttribute('class', 'task-row');
+
+  taskList.appendChild(taskRow);
+  // tasks.push(name);
+  counter++;
+
+  const task = document.createElement('div');
+  task.setAttribute('class', 'task');
+
+  taskRow.appendChild(task);
+
+  const div = document.createElement('div');
+
+  task.appendChild(div);
+
+  const checkbox = document.createElement('input');
+  checkbox.setAttribute('class', 'checkbox');
+  checkbox.setAttribute('type', 'checkbox');
+
+  const taskName = document.createElement('span');
+  taskName.setAttribute('class', 'task-name');
+  taskName.innerText = name;
+
+  div.appendChild(checkbox);
+  div.appendChild(taskName);
+
+  const deleteBtn = document.createElement('div');
+  deleteBtn.setAttribute('class', 'deleteBtn');
+  deleteBtn.innerHTML = `<i class="fa-solid fa-circle-minus fa-lg"></i>`;
+
+  deleteBtn.addEventListener('click', () => {
+    taskList.removeChild(taskRow);
+    // tasks.pop(taskName);
+    counter--;
+    setCount();
+  })
+
+  task.appendChild(deleteBtn);
+
+  const inputCheckbox = taskRow.querySelector('.checkbox');
+  checkbox.addEventListener('click', () => {
+    if (inputCheckbox.checked == true) {
+      taskName.style.color = "#b9b9b9";
+      taskRow.style.backgroundColor = "#F9F9F9";
+    } else {
+      taskName.style.color = "black";
+      taskRow.style.backgroundColor = "#FFFFFF";
+    }
+  })
+
+  return taskRow;
 }
 
 function setCount() {
