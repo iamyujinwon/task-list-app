@@ -25,6 +25,7 @@ body{
 }
 
 .to-do{
+  font-size: 15px;
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 15px;
@@ -36,6 +37,7 @@ body{
 
 .content {
   display: flex;
+  align-items: center;
 }
 
 .task-title {
@@ -49,5 +51,5 @@ body{
 #no-tasks {
   text-align: center;
   font-size: 15px;
-  color: #919191;
+  color: #b9b9b9;
 }

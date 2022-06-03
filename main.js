@@ -11,17 +11,10 @@ input.addEventListener('keypress', e => {
     if (task != "") {
       clearInput();
       addTask();
-
-      if (counter > 0) {
-        noTask.style.display = "none";
-      }
+      isEmpty();
     }
   }
 });
-
-function clearInput() {
-  input.value= "";
-}
 
 function addTask() {
   const div = document.createElement('div');
@@ -45,8 +38,28 @@ function addTask() {
     taskList.removeChild(toDo);
     counter--;
 
-    if (counter == 0) {
-      noTask.style.display = "block";
+    isEmpty();
+  });
+
+  const checkbox = div.querySelector(".checkbox");
+  const taskTitle = div.querySelector(".task-title");
+  checkbox.addEventListener("click", e => {
+    if (checkbox.checked == true) {
+      taskTitle.style.color = "#b9b9b9";
+    } else {
+      taskTitle.style.color = "black";
     }
   });
+}
+
+function clearInput() {
+  input.value= "";
+}
+
+function isEmpty() {
+  if (counter > 0) {
+    noTask.style.display = "none";
+  } else {
+    noTask.style.display = "block";
+  }
 }
