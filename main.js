@@ -2,8 +2,9 @@ const input = document.querySelector('.input');
 const taskList = document.querySelector('.task-list');
 const noTask = document.querySelector('.no-tasks');
 let counter = 0;
-
 let tasks = [];
+
+loadStorage();
 
 input.addEventListener('keypress', e => {
   if (e.key === 'Enter') {
@@ -11,13 +12,24 @@ input.addEventListener('keypress', e => {
   }
 })
 
-loadStorage();
-
 function loadStorage() {
   const localStorageTasks = JSON.parse(localStorage.getItem("task_list"));
+  const localStorageCounter = JSON.parse(localStorage.getItem("task_counter"));
+
+  setCount(localStorageCounter);
+
+  if (localStorageTasks === null) {
+    return;
+  }
 
   localStorageTasks.forEach(task => tasks.push(task));
+  console.log(tasks);
+
   localStorageTasks.forEach(task => createItem(task));
+}
+
+function setLocalStorage(tasks) {
+  localStorage.setItem("task_list", JSON.stringify(tasks));
 }
 
 function onAdd() {
@@ -30,27 +42,28 @@ function onAdd() {
   createItem(text);
 
   tasks.push(text);
-  localStorage.setItem("task_list", JSON.stringify(tasks));
+  console.log(tasks);
+  setLocalStorage(tasks);
 
   input.value = '';
   input.focus();
-  setCount();
+  setCount(counter);
 }
 
 function createItem(name) {
   const taskRow  = document.createElement('li');
   taskRow.setAttribute('class', 'task-row');
-
   taskList.appendChild(taskRow);
+  taskRow.id = counter;
+
   counter++;
+  localStorage.setItem("task_counter", JSON.stringify(counter));
 
   const task = document.createElement('div');
   task.setAttribute('class', 'task');
-
   taskRow.appendChild(task);
 
   const div = document.createElement('div');
-
   task.appendChild(div);
 
   const checkbox = document.createElement('input');
@@ -71,9 +84,12 @@ function createItem(name) {
   deleteBtn.addEventListener('click', () => {
     taskList.removeChild(taskRow);
     tasks = tasks.filter((e) => e !== name);
-    localStorage.setItem("task_list", JSON.stringify(tasks));
+    setLocalStorage(tasks);
+
     counter--;
-    setCount();
+    localStorage.setItem("task_counter", JSON.stringify(counter));
+
+    setCount(counter);
   })
 
   task.appendChild(deleteBtn);
@@ -90,7 +106,7 @@ function createItem(name) {
   })
 }
 
-function setCount() {
+function setCount(counter) {
   if (counter === 0) {
     noTask.innerText = `No tasks`;
   } else {
