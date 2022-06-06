@@ -23,8 +23,6 @@ function loadStorage() {
   }
 
   localStorageTasks.forEach(task => tasks.push(task));
-  console.log(tasks);
-
   localStorageTasks.forEach(task => createItem(task));
 }
 
@@ -42,7 +40,6 @@ function onAdd() {
   createItem(text);
 
   tasks.push(text);
-  console.log(tasks);
   setLocalStorage(tasks);
 
   input.value = '';
