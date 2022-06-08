@@ -80,6 +80,10 @@ li:last-child {
   color: #2f2f2f;
 }
 
+.fa-circle-minus:hover {
+  color: rgb(255, 99, 99);
+}
+
 @media (min-width: 640px) { 
   body {
     background-color: #2f2f2f;

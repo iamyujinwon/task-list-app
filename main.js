@@ -3,32 +3,56 @@ const taskList = document.querySelector('.task-list');
 const noTask = document.querySelector('.no-tasks');
 let counter = 0;
 let tasks = [];
+let id = 0; //UUID
 
-loadStorage();
+// loadStorage();
 
 input.addEventListener('keypress', e => {
   if (e.key === 'Enter') {
     onAdd();
   }
-})
+});
 
-function loadStorage() {
-  const localStorageTasks = JSON.parse(localStorage.getItem("task_list"));
-  const localStorageCounter = JSON.parse(localStorage.getItem("task_counter"));
-
-  setCount(localStorageCounter);
-
-  if (localStorageTasks === null) {
-    return;
+taskList.addEventListener('click', e => {
+  const id = e.target.dataset.id;
+  if (e.target.className === 'fa-solid fa-circle-minus fa-lg') {
+    const toBeDeleted = document.querySelector(`.task-row[data-id="${id}"]`);
+    toBeDeleted.remove();
+    // tasks = tasks.filter(task => task.id !== +id);
+    // setLocalStorage(tasks);
+    
+    counter--;
+    // localStorage.setItem("task_counter", JSON.stringify(counter));
+    setCount(counter);
+  } else if (e.target.className === 'checkbox') {
+    const taskRow = document.querySelector(`.task-row[data-id="${id}"]`);
+    if (e.target.checked === true) {
+      taskRow.style.backgroundColor = "#E8E4DF";
+      taskRow.querySelector('.task-name').style.color = "#b9b9b9";
+    } else {
+      taskRow.style.backgroundColor = "#FFFFFF";
+      taskRow.querySelector('.task-name').style.color = "black";
+    }
   }
+});
 
-  localStorageTasks.forEach(task => tasks.push(task));
-  localStorageTasks.forEach(task => createItem(task));
-}
+// function loadStorage() {
+//   const localStorageTasks = JSON.parse(localStorage.getItem("task_list"));
+//   const localStorageCounter = JSON.parse(localStorage.getItem("task_counter"));
 
-function setLocalStorage(tasks) {
-  localStorage.setItem("task_list", JSON.stringify(tasks));
-}
+//   setCount(localStorageCounter);
+
+//   if (localStorageTasks === null) {
+//     return;
+//   }
+
+//   localStorageTasks.forEach(task => tasks.push(task));
+//   localStorageTasks.forEach(task => createItem(task.text));
+// }
+
+// function setLocalStorage(tasks) {
+//   localStorage.setItem("task_list", JSON.stringify(tasks));
+// }
 
 function onAdd() {
   const text = input.value;
@@ -38,9 +62,8 @@ function onAdd() {
   }
 
   createItem(text);
-
-  tasks.push(text);
-  setLocalStorage(tasks);
+  // tasks.push({"id": (id -1), "text": text});
+  // setLocalStorage(tasks);
 
   input.value = '';
   input.focus();
@@ -50,57 +73,25 @@ function onAdd() {
 function createItem(name) {
   const taskRow  = document.createElement('li');
   taskRow.setAttribute('class', 'task-row');
+  taskRow.setAttribute('data-id', id)
+  taskRow.innerHTML = `
+    <div class="task">
+      <div>
+        <input class="checkbox" type="checkbox" data-id=${id}></input>
+        <span class="task-name">${name}</span>
+      </div>
+      <div class="deleteBtn">
+        <i class="fa-solid fa-circle-minus fa-lg" data-id=${id}></i>
+      </div>
+    </div>
+  `
+
   taskList.appendChild(taskRow);
-  taskRow.id = counter;
+  id++;
+  // localStorage.setItem("id", JSON.stringify(id));
 
   counter++;
-  localStorage.setItem("task_counter", JSON.stringify(counter));
-
-  const task = document.createElement('div');
-  task.setAttribute('class', 'task');
-  taskRow.appendChild(task);
-
-  const div = document.createElement('div');
-  task.appendChild(div);
-
-  const checkbox = document.createElement('input');
-  checkbox.setAttribute('class', 'checkbox');
-  checkbox.setAttribute('type', 'checkbox');
-
-  const taskName = document.createElement('span');
-  taskName.setAttribute('class', 'task-name');
-  taskName.innerText = name;
-
-  div.appendChild(checkbox);
-  div.appendChild(taskName);
-
-  const deleteBtn = document.createElement('div');
-  deleteBtn.setAttribute('class', 'deleteBtn');
-  deleteBtn.innerHTML = `<i class="fa-solid fa-circle-minus fa-lg"></i>`;
-
-  deleteBtn.addEventListener('click', () => {
-    taskList.removeChild(taskRow);
-    tasks = tasks.filter((e) => e !== name);
-    setLocalStorage(tasks);
-
-    counter--;
-    localStorage.setItem("task_counter", JSON.stringify(counter));
-
-    setCount(counter);
-  })
-
-  task.appendChild(deleteBtn);
-
-  const inputCheckbox = taskRow.querySelector('.checkbox');
-  checkbox.addEventListener('click', () => {
-    if (inputCheckbox.checked == true) {
-      taskName.style.color = "#b9b9b9";
-      taskRow.style.backgroundColor = "#F9F9F9";
-    } else {
-      taskName.style.color = "black";
-      taskRow.style.backgroundColor = "#FFFFFF";
-    }
-  })
+  // localStorage.setItem("task_counter", JSON.stringify(counter));
 }
 
 function setCount(counter) {
