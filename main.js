@@ -1,6 +1,7 @@
 const input = document.querySelector('.input');
 const taskList = document.querySelector('.task-list');
 const noTask = document.querySelector('.no-tasks');
+const clearBtn = document.querySelector('.clearBtn');
 let counter = 0;
 let tasks = [];
 let id = 0; //UUID
@@ -11,6 +12,11 @@ input.addEventListener('keypress', e => {
   if (e.key === 'Enter') {
     onAdd();
   }
+});
+
+clearBtn.addEventListener('click', () => {
+  tasks = [];
+  taskList.innerHTML = '';
 });
 
 taskList.addEventListener('click', e => {
