@@ -2,11 +2,9 @@ const input = document.querySelector('.input');
 const taskList = document.querySelector('.task-list');
 const noTask = document.querySelector('.no-tasks');
 const clearBtn = document.querySelector('.clearBtn');
-let counter = 0;
 let tasks = [];
-let id = 0; //UUID
 
-// loadStorage();
+loadStorage();
 
 input.addEventListener('keypress', e => {
   if (e.key === 'Enter') {
@@ -15,23 +13,26 @@ input.addEventListener('keypress', e => {
 });
 
 clearBtn.addEventListener('click', () => {
-  tasks = [];
-  taskList.innerHTML = '';
+  if (tasks.length !== 0) {
+    tasks = [];
+    taskList.innerHTML = '';
+    setLocalStorage(tasks);
+
+    setCount(tasks.length);
+  }
 });
 
 taskList.addEventListener('click', e => {
   const id = e.target.dataset.id;
+  const taskRow = document.querySelector(`.task-row[data-id="${id}"]`);
+
   if (e.target.className === 'fa-solid fa-circle-minus fa-lg') {
-    const toBeDeleted = document.querySelector(`.task-row[data-id="${id}"]`);
-    toBeDeleted.remove();
-    // tasks = tasks.filter(task => task.id !== +id);
-    // setLocalStorage(tasks);
-    
-    counter--;
-    // localStorage.setItem("task_counter", JSON.stringify(counter));
-    setCount(counter);
+    taskRow.remove();
+    tasks = tasks.filter(task => task.id !== +id);
+
+    setLocalStorage(tasks);
+    setCount(tasks.length);
   } else if (e.target.className === 'checkbox') {
-    const taskRow = document.querySelector(`.task-row[data-id="${id}"]`);
     if (e.target.checked === true) {
       taskRow.style.backgroundColor = "#E8E4DF";
       taskRow.querySelector('.task-name').style.color = "#b9b9b9";
@@ -42,23 +43,19 @@ taskList.addEventListener('click', e => {
   }
 });
 
-// function loadStorage() {
-//   const localStorageTasks = JSON.parse(localStorage.getItem("task_list"));
-//   const localStorageCounter = JSON.parse(localStorage.getItem("task_counter"));
+function loadStorage() {
+  const localStorageTasks = JSON.parse(localStorage.getItem("task_list"));
 
-//   setCount(localStorageCounter);
+  if (localStorageTasks === null) {
+    return;
+  }
+  localStorageTasks.forEach(task => createItem(task.text));
+  setCount(tasks.length);
+}
 
-//   if (localStorageTasks === null) {
-//     return;
-//   }
-
-//   localStorageTasks.forEach(task => tasks.push(task));
-//   localStorageTasks.forEach(task => createItem(task.text));
-// }
-
-// function setLocalStorage(tasks) {
-//   localStorage.setItem("task_list", JSON.stringify(tasks));
-// }
+function setLocalStorage(tasks) {
+  localStorage.setItem("task_list", JSON.stringify(tasks));
+}
 
 function onAdd() {
   const text = input.value;
@@ -68,15 +65,14 @@ function onAdd() {
   }
 
   createItem(text);
-  // tasks.push({"id": (id -1), "text": text});
-  // setLocalStorage(tasks);
 
   input.value = '';
   input.focus();
-  setCount(counter);
+  setCount(tasks.length);
 }
 
 function createItem(name) {
+  const id = tasks.length;
   const taskRow  = document.createElement('li');
   taskRow.setAttribute('class', 'task-row');
   taskRow.setAttribute('data-id', id)
@@ -93,11 +89,9 @@ function createItem(name) {
   `
 
   taskList.appendChild(taskRow);
-  id++;
-  // localStorage.setItem("id", JSON.stringify(id));
 
-  counter++;
-  // localStorage.setItem("task_counter", JSON.stringify(counter));
+  tasks.push({id, "text": name});
+  setLocalStorage(tasks);
 }
 
 function setCount(counter) {
