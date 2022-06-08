@@ -40,6 +40,7 @@ taskList.addEventListener('click', e => {
       taskRow.style.backgroundColor = "#FFFFFF";
       taskRow.querySelector('.task-name').style.color = "black";
     }
+    setLocalStorage(tasks)
   }
 });
 
@@ -91,6 +92,7 @@ function createItem(name) {
   taskList.appendChild(taskRow);
 
   tasks.push({id, "text": name});
+  console.log(tasks);
   setLocalStorage(tasks);
 }
 
