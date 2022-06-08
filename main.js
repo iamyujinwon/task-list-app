@@ -6,7 +6,10 @@ let tasks = [];
 
 loadStorage();
 
-input.addEventListener('keypress', e => {
+input.addEventListener('keydown', e => {
+  if(e.isComposing) {
+    return;
+  }
   if (e.key === 'Enter') {
     onAdd();
   }
