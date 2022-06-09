@@ -32,18 +32,20 @@ taskList.addEventListener('click', e => {
   if (e.target.className === 'fa-solid fa-circle-minus fa-lg') {
     taskRow.remove();
     tasks = tasks.filter(task => task.id !== +id);
-
     setLocalStorage(tasks);
     setCount(tasks.length);
   } else if (e.target.className === 'checkbox') {
-    if (e.target.checked === true) {
+    const task = tasks.find(task => task.id === + id);
+    task.completed = !task.completed;
+
+    if (e.target.checked) {
       taskRow.style.backgroundColor = "#E8E4DF";
       taskRow.querySelector('.task-name').style.color = "#b9b9b9";
     } else {
       taskRow.style.backgroundColor = "#FFFFFF";
       taskRow.querySelector('.task-name').style.color = "black";
     }
-    setLocalStorage(tasks)
+    setLocalStorage(tasks);
   }
 });
 
@@ -53,7 +55,7 @@ function loadStorage() {
   if (localStorageTasks === null) {
     return;
   }
-  localStorageTasks.forEach(task => createItem(task.text));
+  localStorageTasks.forEach(task => createItem(task.text, task.completed));
   setCount(tasks.length);
 }
 
@@ -68,22 +70,23 @@ function onAdd() {
     return;
   }
 
-  createItem(text);
+  createItem(text, false);
 
   input.value = '';
   input.focus();
   setCount(tasks.length);
 }
 
-function createItem(name) {
+function createItem(name, isChecked) {
   const id = tasks.length;
   const taskRow  = document.createElement('li');
   taskRow.setAttribute('class', 'task-row');
   taskRow.setAttribute('data-id', id)
+
   taskRow.innerHTML = `
     <div class="task">
       <div>
-        <input class="checkbox" type="checkbox" data-id=${id}></input>
+        <input class="checkbox" type="checkbox" data-id=${id} ${isChecked && "checked"}></input>
         <span class="task-name">${name}</span>
       </div>
       <div class="deleteBtn">
@@ -94,8 +97,15 @@ function createItem(name) {
 
   taskList.appendChild(taskRow);
 
-  tasks.push({id, "text": name});
-  console.log(tasks);
+  if (isChecked) {
+    taskRow.style.backgroundColor = "#E8E4DF";
+    taskRow.querySelector('.task-name').style.color = "#b9b9b9";
+  } else {
+    taskRow.style.backgroundColor = "#FFFFFF";
+    taskRow.querySelector('.task-name').style.color = "black";
+  }
+
+  tasks.push({id, text: name, completed: isChecked});
   setLocalStorage(tasks);
 }
 
